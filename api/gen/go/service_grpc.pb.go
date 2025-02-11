@@ -4,7 +4,7 @@
 // - protoc             v3.21.12
 // source: service.proto
 
-package link_shortening_service_pb
+package url_shortening_service_pb
 
 import (
 	context "context"
@@ -19,16 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Url_Save_FullMethodName     = "/link_shortening_service.Url/Save"
-	Url_Redirect_FullMethodName = "/link_shortening_service.Url/Redirect"
+	Url_SaveUrl_FullMethodName     = "/url_shortening_service.Url/SaveUrl"
+	Url_RedirectUrl_FullMethodName = "/url_shortening_service.Url/RedirectUrl"
 )
 
 // UrlClient is the client API for Url service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UrlClient interface {
-	Save(ctx context.Context, in *SaveRequest, opts ...grpc.CallOption) (*SaveResponse, error)
-	Redirect(ctx context.Context, in *RedirectRequest, opts ...grpc.CallOption) (*RedirectResponse, error)
+	SaveUrl(ctx context.Context, in *SaveUrlRequest, opts ...grpc.CallOption) (*SaveUrlResponse, error)
+	RedirectUrl(ctx context.Context, in *RedirectUrlRequest, opts ...grpc.CallOption) (*RedirectUrlResponse, error)
 }
 
 type urlClient struct {
@@ -39,20 +39,20 @@ func NewUrlClient(cc grpc.ClientConnInterface) UrlClient {
 	return &urlClient{cc}
 }
 
-func (c *urlClient) Save(ctx context.Context, in *SaveRequest, opts ...grpc.CallOption) (*SaveResponse, error) {
+func (c *urlClient) SaveUrl(ctx context.Context, in *SaveUrlRequest, opts ...grpc.CallOption) (*SaveUrlResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SaveResponse)
-	err := c.cc.Invoke(ctx, Url_Save_FullMethodName, in, out, cOpts...)
+	out := new(SaveUrlResponse)
+	err := c.cc.Invoke(ctx, Url_SaveUrl_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *urlClient) Redirect(ctx context.Context, in *RedirectRequest, opts ...grpc.CallOption) (*RedirectResponse, error) {
+func (c *urlClient) RedirectUrl(ctx context.Context, in *RedirectUrlRequest, opts ...grpc.CallOption) (*RedirectUrlResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RedirectResponse)
-	err := c.cc.Invoke(ctx, Url_Redirect_FullMethodName, in, out, cOpts...)
+	out := new(RedirectUrlResponse)
+	err := c.cc.Invoke(ctx, Url_RedirectUrl_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,8 +63,8 @@ func (c *urlClient) Redirect(ctx context.Context, in *RedirectRequest, opts ...g
 // All implementations must embed UnimplementedUrlServer
 // for forward compatibility.
 type UrlServer interface {
-	Save(context.Context, *SaveRequest) (*SaveResponse, error)
-	Redirect(context.Context, *RedirectRequest) (*RedirectResponse, error)
+	SaveUrl(context.Context, *SaveUrlRequest) (*SaveUrlResponse, error)
+	RedirectUrl(context.Context, *RedirectUrlRequest) (*RedirectUrlResponse, error)
 	mustEmbedUnimplementedUrlServer()
 }
 
@@ -75,11 +75,11 @@ type UrlServer interface {
 // pointer dereference when methods are called.
 type UnimplementedUrlServer struct{}
 
-func (UnimplementedUrlServer) Save(context.Context, *SaveRequest) (*SaveResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Save not implemented")
+func (UnimplementedUrlServer) SaveUrl(context.Context, *SaveUrlRequest) (*SaveUrlResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveUrl not implemented")
 }
-func (UnimplementedUrlServer) Redirect(context.Context, *RedirectRequest) (*RedirectResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Redirect not implemented")
+func (UnimplementedUrlServer) RedirectUrl(context.Context, *RedirectUrlRequest) (*RedirectUrlResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RedirectUrl not implemented")
 }
 func (UnimplementedUrlServer) mustEmbedUnimplementedUrlServer() {}
 func (UnimplementedUrlServer) testEmbeddedByValue()             {}
@@ -102,38 +102,38 @@ func RegisterUrlServer(s grpc.ServiceRegistrar, srv UrlServer) {
 	s.RegisterService(&Url_ServiceDesc, srv)
 }
 
-func _Url_Save_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SaveRequest)
+func _Url_SaveUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveUrlRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UrlServer).Save(ctx, in)
+		return srv.(UrlServer).SaveUrl(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Url_Save_FullMethodName,
+		FullMethod: Url_SaveUrl_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UrlServer).Save(ctx, req.(*SaveRequest))
+		return srv.(UrlServer).SaveUrl(ctx, req.(*SaveUrlRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Url_Redirect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RedirectRequest)
+func _Url_RedirectUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RedirectUrlRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UrlServer).Redirect(ctx, in)
+		return srv.(UrlServer).RedirectUrl(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Url_Redirect_FullMethodName,
+		FullMethod: Url_RedirectUrl_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UrlServer).Redirect(ctx, req.(*RedirectRequest))
+		return srv.(UrlServer).RedirectUrl(ctx, req.(*RedirectUrlRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -142,16 +142,16 @@ func _Url_Redirect_Handler(srv interface{}, ctx context.Context, dec func(interf
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Url_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "link_shortening_service.Url",
+	ServiceName: "url_shortening_service.Url",
 	HandlerType: (*UrlServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Save",
-			Handler:    _Url_Save_Handler,
+			MethodName: "SaveUrl",
+			Handler:    _Url_SaveUrl_Handler,
 		},
 		{
-			MethodName: "Redirect",
-			Handler:    _Url_Redirect_Handler,
+			MethodName: "RedirectUrl",
+			Handler:    _Url_RedirectUrl_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

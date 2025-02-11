@@ -1,26 +1,26 @@
 syntax = "proto3";
 
-package link_shortening_service;
+package url_shortening_service;
 
-option go_package = "github.com/VadimShara/link_shortening_service/api/pb;link_shortening_service_pb";
+option go_package = "github.com/VadimShara/url_shortening_service/api/pb;url_shortening_service_pb";
 
 service Url {
-    rpc Save (SaveRequest) returns (SaveResponse);
-    rpc Redirect (RedirectRequest) returns (RedirectResponse);
+    rpc SaveUrl (SaveUrlRequest) returns (SaveUrlResponse);
+    rpc RedirectUrl (RedirectUrlRequest) returns (RedirectUrlResponse);
 }
 
-message SaveRequest {
+message SaveUrlRequest {
     string url = 1;
 }
 
-message SaveResponse {
+message SaveUrlResponse {
     string alias = 1;
 }
 
-message RedirectRequest {
+message RedirectUrlRequest {
     string alias = 1;
 }
 
-message RedirectResponse {
+message RedirectUrlResponse {
     string url = 1;
 }
