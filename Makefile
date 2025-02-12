@@ -1,11 +1,15 @@
-.PHONY: all generate
+.PHONY: compose
+compose:
+	docker-compose up -d
+.PHONY: compose-down
+compose-down:
+	docker-compose down --remove-orphans
 
-all: generate
+.PHONY: build
+build:
+	docker-compose down --remove-orphans
+	docker-compose build
 
-generate:
-	@echo "Generating gRPC code..."
-	protoc -I api/proto api/proto/service.proto \
-		--go_out=api/gen/go/ --go_opt=paths=source_relative \
-		--go-grpc_out=api/gen/go/ --go-grpc_opt=paths=source_relative
-
-gen: generate
+.PHONY: test
+test:
+	go test -cover ./...s
