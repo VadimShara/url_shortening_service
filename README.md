@@ -47,7 +47,7 @@ POSTGRES_SSLMODE=disable
 #### 1. Сохранение оригинального URL и возврат сокращённого:
 
 **Method:** `SaveUrl`
-- **Request:**
+- **Request parameters:**
 
     - `url` - Оригинальный URL
 
@@ -59,7 +59,7 @@ POSTGRES_SSLMODE=disable
 
 **Method:** `RedirectUrl`
 
-- **Request:**
+- **Request parameters:**
 
     - `alias` - Сокращённый URL
 
@@ -67,6 +67,6 @@ POSTGRES_SSLMODE=disable
 
     - `url` - Оригинальный URL
 
-Запуск тестов по команде:
+### Запуск тестов по команде:
 
 `make test`
