@@ -1,0 +1,72 @@
+# URL-SHORTENING-SERVICE
+
+## Описание
+Проект представляет собой систему для укорочения URL-адресов.
+
+### Установка
+
+Проект запускается по команде:
+
+`make compose`
+
+Для выбора хранилища в файле .env можно изменить переменные STORAGE и DB_REPLICAS:
+
+`STORAGE="postgres"/"in-memory"`
+
+`DB_REPLICAS=0` (in-memory)
+
+`DB_REPLICAS=1` (postgres)
+
+Также можно воспользоваться рекомендуем файлов конфигурации:
+
+```env
+# APP Configuration
+ENV=local
+LOG_LEVEL=debug
+
+# gRPC Server Configuration
+PORT=44044
+TIMEOUT=10h
+
+# storage Configuration
+STORAGE=postgres
+DB_REPLICAS=1
+MIGRATIONS_PATH=file://migrations/
+
+# PostgreSQL Configuration
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=admin
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+POSTGRES_DBNAME=url_shortening
+POSTGRES_SSLMODE=disable
+```
+
+### API Endpoints
+
+#### 1. Сохранение оригинального URL и возврат сокращённого:
+
+**Method:** `SaveUrl`
+- **Request:**
+
+    - `url` - Оригинальный URL
+
+- **Response:**
+
+    - `alias` - Сокращённый URL
+
+#### 2. Получение оригинального URL по сокращённому:
+
+**Method:** `RedirectUrl`
+
+- **Request:**
+
+    - `alias` - Сокращённый URL
+
+- **Response:**
+
+    - `url` - Оригинальный URL
+
+Запуск тестов по команде:
+
+`make test`

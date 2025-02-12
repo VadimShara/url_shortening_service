@@ -12,4 +12,4 @@ build:
 
 .PHONY: test
 test:
-	go test -cover ./...s
+	go test -cover	$(shell find . -name '*_test.go' -exec dirname {} \; | sort -u)
