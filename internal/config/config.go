@@ -2,7 +2,6 @@ package config
 
 import (
 	"log"
-	"os"
 	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -36,10 +35,6 @@ type GRPCConfig struct {
 }
 
 func init() {
-	if os.Getenv("TEST_ENV") == "true" {
-		return
-	}
-
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file")

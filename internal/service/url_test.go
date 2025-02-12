@@ -6,16 +6,14 @@ import (
 	"log/slog"
 	"testing"
 
-	"github.com/VadimShara/url_shortening_service/internal/service"
-	"github.com/VadimShara/url_shortening_service/internal/service/mocks"
-	"github.com/VadimShara/url_shortening_service/pkg/errs"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/VadimShara/url_shortening_service/internal/service"
+	"github.com/VadimShara/url_shortening_service/internal/tests/mocks"
+	"github.com/VadimShara/url_shortening_service/pkg/errs"
 )
 
-//go:generate mockgen -source=url.go -destination=mocks/mock_url.go -package=mocks
-
-// Test структура для унифицированного подхода
 type Test struct {
 	name         string
 	verifyResult func(t *testing.T, s *service.Url, testName string)

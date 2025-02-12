@@ -18,14 +18,7 @@ func NewRepository(cfg config.Config) Repository {
 
 	switch repo {
 	case "postgres":
-		return postgres.NewDB(
-			cfg.PGConfig.User,
-			cfg.PGConfig.Password,
-			cfg.PGConfig.Host,
-			cfg.PGConfig.Port,
-			cfg.PGConfig.DBName,
-			cfg.PGConfig.SSLMode,
-		)
+		return postgres.NewDB(cfg.PGConfig)
 	default:
 		return inMemory.NewDB()
 	}

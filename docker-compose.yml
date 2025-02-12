@@ -1,18 +1,6 @@
 version: "3.9"
 
 services:
-  db:
-    restart: always
-    image: "postgres:latest"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DBNAME}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   server:
     restart: always
     image: server
@@ -25,6 +13,22 @@ services:
       - .env
     ports:
       - "${PORT}:${PORT}"
+    depends_on:
+      - db
+
+  db:
+      restart: always
+      image: "postgres:latest"
+      environment:
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: ${POSTGRES_DBNAME}
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      deploy:
+        replicas: ${DB_REPLICAS}      
 
 volumes:
   postgres_data:      

@@ -6,10 +6,11 @@ import (
 	"fmt"
 	"log/slog"
 
+	"github.com/go-playground/validator/v10"
+
 	"github.com/VadimShara/url_shortening_service/internal/lib/generateAlias"
 	"github.com/VadimShara/url_shortening_service/pkg/errs"
 	"github.com/VadimShara/url_shortening_service/pkg/logger"
-	"github.com/go-playground/validator/v10"
 )
 
 const aliasLength = 10
@@ -67,6 +68,8 @@ func (u *Url) SaveUrl(ctx context.Context, url string) (string, error) {
 		return "", fmt.Errorf("%s: %w", op, err)
 	}
 
+	u.log.Info("url requested", slog.String("url", url))
+
 	alias := generateAlias.NewAlias(aliasLength)
 
 	alias, err = u.urlSaver.SaveUrl(ctx, url, alias)
@@ -84,11 +87,15 @@ func (u *Url) SaveUrl(ctx context.Context, url string) (string, error) {
 		}
 	}
 
+	u.log.Info("url added", slog.String("alias", alias))
+
 	return alias, nil
 }
 
 func (u *Url) RedirectUrl(ctx context.Context, alias string) (string, error) {
 	const op = "Url.RedirectUrl" //operation
+
+	u.log.Info("alias requested", slog.String("alias", alias))
 
 	url, err := u.urlRedirecter.GetUrl(ctx, alias)
 	if err != nil {
@@ -102,6 +109,8 @@ func (u *Url) RedirectUrl(ctx context.Context, alias string) (string, error) {
 
 		return "", fmt.Errorf("%s: %w", op, err)
 	}
+
+	u.log.Info("got url", slog.String("url", url))
 
 	return url, nil
 }

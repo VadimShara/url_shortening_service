@@ -23,7 +23,11 @@ func New(
 
 	urlService := service.New(log, repo, repo)
 
-	log.Info(cfg.Storage)
+	if cfg.Storage == "postgres" {
+		log.Info("storage selected", "storage", cfg.Storage)
+	} else {
+		log.Info("storage selected", "storage", "in-memory")
+	}
 
 	grpcApp := grpcapp.New(log, urlService, grpcPort)
 

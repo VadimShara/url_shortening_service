@@ -8,33 +8,33 @@ import (
 	"log"
 	"time"
 
-	errs "github.com/VadimShara/url_shortening_service/pkg/errs"
 	"github.com/jackc/pgconn"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"github.com/VadimShara/url_shortening_service/internal/config"
+	errs "github.com/VadimShara/url_shortening_service/pkg/errs"
 )
 
-// func PGConnectionStr(config config.PostresConfig) string {
-// 	return fmt.Sprintf(
-// 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
-// 		config.User,
-// 		config.Password,
-// 		config.Host,
-// 		config.Port,
-// 		config.DBName,
-// 		config.SSLMode,
-// 	)
-// }
+func PGConnectionStr(config config.PostresConfig) string {
+	return fmt.Sprintf(
+		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
+		config.User,
+		config.Password,
+		config.Host,
+		config.Port,
+		config.DBName,
+		config.SSLMode,
+	)
+}
 
 type DB struct {
 	Pool *pgxpool.Pool
 }
 
-func NewDB(user, password, host string, port int, dbName, sslMode string) *DB {
-	dbUrl := fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
-		user, password, host, port, dbName, sslMode,
-	)
+func NewDB(config config.PostresConfig) *DB {
+	dbUrl := PGConnectionStr(config)
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

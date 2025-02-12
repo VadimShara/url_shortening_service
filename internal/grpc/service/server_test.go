@@ -4,10 +4,11 @@ import (
 	"context"
 	"testing"
 
-	service "github.com/VadimShara/url_shortening_service/api/gen/go"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	service "github.com/VadimShara/url_shortening_service/api/gen/go"
 )
 
 type mockUrl struct {

@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/VadimShara/url_shortening_service/internal/config"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+
+	"github.com/VadimShara/url_shortening_service/internal/config"
 )
 
 func main() {

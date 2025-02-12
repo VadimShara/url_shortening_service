@@ -23,8 +23,6 @@ func NewDB() *DB {
 		clearInterval: time.Minute,
 	}
 
-	//db.startClearingHandler() // clear memory before connecting
-
 	return db
 }
 
@@ -60,22 +58,4 @@ func (d *DB) GetUrl(ctx context.Context, alias string) (string, error) {
 	}
 
 	return url, nil
-}
-
-func (d *DB) startClearingHandler() {
-	ticker := time.NewTicker(d.clearInterval)
-
-	go func() {
-		for range ticker.C {
-			d.mu.Lock()
-			for url := range d.urlStorage {
-				delete(d.urlStorage, url)
-			}
-
-			for alias := range d.aliasStorage {
-				delete(d.aliasStorage, alias)
-			}
-			d.mu.Unlock()
-		}
-	}()
 }
