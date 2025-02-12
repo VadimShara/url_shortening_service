@@ -23,7 +23,7 @@ func NewDB() *DB {
 		clearInterval: time.Minute,
 	}
 
-	db.startClearingHandler() // clear memory before connecting
+	//db.startClearingHandler() // clear memory before connecting
 
 	return db
 }
@@ -34,8 +34,8 @@ func (d *DB) SaveUrl(ctx context.Context, urlToSave, alias string) (string, erro
 	d.mu.Lock()
 	defer d.mu.Unlock()
 
-	if alias, exists := d.urlStorage[urlToSave]; exists {
-		return alias, fmt.Errorf("%s: %w", op, errs.ErrUrlExists)
+	if existingAlias, exists := d.urlStorage[urlToSave]; exists {
+		return existingAlias, fmt.Errorf("%s: %w", op, errs.ErrUrlExists)
 	}
 
 	if _, exists := d.aliasStorage[alias]; exists {

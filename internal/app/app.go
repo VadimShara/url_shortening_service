@@ -23,6 +23,8 @@ func New(
 
 	urlService := service.New(log, repo, repo)
 
+	log.Info(cfg.Storage)
+
 	grpcApp := grpcapp.New(log, urlService, grpcPort)
 
 	return &App{

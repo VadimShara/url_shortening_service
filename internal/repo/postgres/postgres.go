@@ -10,6 +10,7 @@ import (
 
 	errs "github.com/VadimShara/url_shortening_service/pkg/errs"
 	"github.com/jackc/pgconn"
+	"github.com/jackc/pgx"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -54,28 +55,43 @@ func (db *DB) CLose() {
 	db.Pool.Close()
 }
 
+func (d *DB) checkUrl(ctx context.Context, urlToCheck string) (string, error) {
+	var alias string
+	err := d.Pool.QueryRow(ctx, "SELECT alias FROM url WHERE url = $1", urlToCheck).Scan(&alias)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return "", nil
+		}
+		return "", fmt.Errorf("failed to check for existing url: %w", err)
+	}
+	return alias, nil
+}
+
 func (d *DB) SaveUrl(ctx context.Context, urlToSave, alias string) (string, error) {
 	const op = "repo.postgres.SaveUrl"
 
+	existingAlias, err := d.checkUrl(ctx, urlToSave)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	if existingAlias != "" {
+		return existingAlias, errs.ErrUrlExists
+	}
+
 	const query = "INSERT INTO url (url, alias) VALUES ($1, $2)"
 
-	_, err := d.Pool.Exec(ctx, query, urlToSave, alias)
+	_, err = d.Pool.Exec(ctx, query, urlToSave, alias)
 	if err != nil {
 		if pgErr, ok := err.(*pgconn.PgError); ok && pgErr.Code == "23505" {
-			switch pgErr.ConstraintName {
-			case "url_url_key":
-				var existingAlias string
-				err = d.Pool.QueryRow(ctx,
-					"SELECT alias FROM url WHERE url = $1", urlToSave).Scan(&existingAlias)
-				if err != nil {
-					return "", fmt.Errorf("%s: %w", op, err)
-				}
-				return existingAlias, errs.ErrUrlExists
-			case "url_alias_key":
-				return "", fmt.Errorf("%s: %w", op, errs.ErrAliasExists)
+			if pgErr.ConstraintName == "url_alias_key" {
+				return "", fmt.Errorf("%s: alias already exists: %w", op, errs.ErrAliasExists)
 			}
+
+			return "", fmt.Errorf("%s: failed to save url and alias: %w", op, err)
 		}
-		return "", fmt.Errorf("%s : failed to save url and alias: %w", op, err)
+
+		return "", fmt.Errorf("%s: failed to save url and alias: %w", op, err)
 	}
 
 	return alias, nil
